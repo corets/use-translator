@@ -1,12 +1,15 @@
+import React from "react"
 import { useTranslate } from "./index"
 import { mount } from "enzyme"
-import React from "react"
 import { createTranslator } from "@corets/translator"
 import { act } from "react-dom/test-utils"
 
 describe("useTranslate", () => {
   it("uses translations", () => {
-    const translator = createTranslator({ en: { key: "value" } }, "en")
+    const translator = createTranslator(
+      { en: { key: "value" } },
+      { language: "en" }
+    )
 
     const Test = () => {
       const t = useTranslate(translator)
@@ -21,10 +24,13 @@ describe("useTranslate", () => {
   })
 
   it("uses translations with scope", () => {
-    const translator = createTranslator({ en: { bar: { key: "foo" } } }, "en")
+    const translator = createTranslator(
+      { en: { bar: { key: "foo" } } },
+      { language: "en", debounceChanges: 0 }
+    )
 
     const Test = () => {
-      const t = useTranslate(translator, "bar")
+      const t = useTranslate(translator, { scope: "bar" })
 
       return <h1>{t("key")}</h1>
     }
@@ -36,13 +42,16 @@ describe("useTranslate", () => {
   })
 
   it("updates translations", async () => {
-    const translator = createTranslator({ en: { bar: { key: "foo" } } }, "en")
+    const translator = createTranslator(
+      { en: { bar: { key: "foo" } } },
+      { language: "en", debounceChanges: 0 }
+    )
 
     let renders = 0
 
     const Test = () => {
       renders++
-      const t = useTranslate(translator, "bar")
+      const t = useTranslate(translator, { scope: "bar" })
 
       return <h1>{t("key")}</h1>
     }

@@ -1,6 +1,6 @@
+import React from "react"
 import { TranslatorLanguage, useLanguage } from "./index"
 import { mount } from "enzyme"
-import React from "react"
 import { createTranslator } from "@corets/translator"
 import { act } from "react-dom/test-utils"
 
@@ -8,8 +8,7 @@ describe("useLanguage", () => {
   it("uses language", () => {
     const translator = createTranslator(
       { en: { key: "value-en" }, de: { key: "value-de" } },
-      "en",
-      "de"
+      { language: "en", fallbackLanguage: "de", debounceChanges: 0 }
     )
     let receivedLanguage: TranslatorLanguage
 

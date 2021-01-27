@@ -1,4 +1,8 @@
-import { ObservableTranslator, TranslateFunction } from "@corets/translator"
+import {
+  ObservableTranslator,
+  TranslateFunction,
+  TranslateFunctionFactoryOptions,
+} from "@corets/translator"
 
 export type TranslatorLanguage = {
   current: string
@@ -12,7 +16,7 @@ export type UseTranslator = (
 ) => ObservableTranslator
 export type UseTranslate = (
   translator?: ObservableTranslator,
-  scope?: string
+  options?: TranslateFunctionFactoryOptions
 ) => TranslateFunction
 export type UseLanguage = (
   translator?: ObservableTranslator

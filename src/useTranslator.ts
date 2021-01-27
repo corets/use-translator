@@ -1,6 +1,5 @@
-import { useValue } from "@corets/use-value"
 import { UseTranslator } from "./types"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { TranslatorContext } from "./TranslatorContext"
 
 export const useTranslator: UseTranslator = (translator) => {
@@ -16,9 +15,14 @@ export const useTranslator: UseTranslator = (translator) => {
     }
   }
 
-  useValue(translator.translations)
-  useValue(translator.language)
-  useValue(translator.fallbackLanguage)
+  const [reference, setReference] = useState(0)
+
+  useEffect(() => {
+    return translator!.listen(
+      () => setReference((previous) => previous + 1),
+      false
+    )
+  }, [])
 
   return translator
 }

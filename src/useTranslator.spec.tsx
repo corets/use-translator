@@ -1,14 +1,14 @@
+import React from "react"
 import { createTranslator, ObservableTranslator } from "@corets/translator"
 import { mount } from "enzyme"
 import { act } from "react-dom/test-utils"
-import React from "react"
 import { TranslatorContext, useTranslator } from "./index"
 
 describe("useTranslator", () => {
   it("uses translator", () => {
     const translator = createTranslator(
       { en: { foo: "bar" }, de: { foo: "yolo" } },
-      "en"
+      { language: "en", debounceChanges: 0 }
     )
 
     let renders = 0
@@ -53,7 +53,7 @@ describe("useTranslator", () => {
   it("uses translator from context", () => {
     const translator = createTranslator(
       { en: { foo: "bar" }, de: { foo: "yolo" } },
-      "en"
+      { language: "en", debounceChanges: 0 }
     )
     let renders = 0
 
