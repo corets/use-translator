@@ -1,8 +1,7 @@
 import React from "react"
 import { TranslatorLanguage, useLanguage } from "./index"
-import { mount } from "enzyme"
 import { createTranslator } from "@corets/translator"
-import { act } from "react-dom/test-utils"
+import { act, render, screen } from "@testing-library/react"
 
 describe("useLanguage", () => {
   it("uses language", () => {
@@ -19,11 +18,12 @@ describe("useLanguage", () => {
       return <h1>{language.current}</h1>
     }
 
-    const wrapper = mount(<Test />)
-    const target = () => wrapper.find("h1")
+    render(<Test/>)
+
+    const target = screen.getByRole("heading")
 
     expect(receivedLanguage!).not.toBeUndefined()
-    expect(target().text()).toBe("en")
+    expect(target).toHaveTextContent("en")
     expect(receivedLanguage!.current).toBe("en")
     expect(receivedLanguage!.fallback).toBe("de")
     expect(receivedLanguage!.available).toEqual(["en", "de"])
@@ -32,7 +32,7 @@ describe("useLanguage", () => {
       receivedLanguage.set("de")
     })
 
-    expect(target().text()).toBe("de")
+    expect(target).toHaveTextContent("de")
     expect(translator.getLanguage()).toBe("de")
   })
 })

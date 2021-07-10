@@ -1,8 +1,7 @@
 import React from "react"
 import { useTranslate } from "./index"
-import { mount } from "enzyme"
 import { createTranslator } from "@corets/translator"
-import { act } from "react-dom/test-utils"
+import { act, render, screen } from "@testing-library/react"
 
 describe("useTranslate", () => {
   it("uses translations", () => {
@@ -17,10 +16,11 @@ describe("useTranslate", () => {
       return <h1>{t("key")}</h1>
     }
 
-    const wrapper = mount(<Test />)
-    const target = () => wrapper.find("h1")
+    render(<Test/>)
 
-    expect(target().text()).toBe("value")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("value")
   })
 
   it("uses translations with scope", () => {
@@ -35,10 +35,11 @@ describe("useTranslate", () => {
       return <h1>{t("key")}</h1>
     }
 
-    const wrapper = mount(<Test />)
-    const target = () => wrapper.find("h1")
+    render(<Test/>)
 
-    expect(target().text()).toBe("foo")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("foo")
   })
 
   it("updates translations", async () => {
@@ -56,25 +57,26 @@ describe("useTranslate", () => {
       return <h1>{t("key")}</h1>
     }
 
-    const wrapper = mount(<Test />)
-    const target = () => wrapper.find("h1")
+    render(<Test/>)
 
-    expect(target().text()).toBe("foo")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("foo")
     expect(renders).toBe(1)
 
     act(() => translator.addTranslations({ en: { bar: { key: "yolo" } } }))
 
-    expect(target().text()).toBe("yolo")
+    expect(target).toHaveTextContent("yolo")
     expect(renders).toBe(2)
 
     act(() => translator.addTranslations({ en: { ding: "dong" } }))
 
-    expect(target().text()).toBe("yolo")
+    expect(target).toHaveTextContent("yolo")
     expect(renders).toBe(3)
 
     act(() => translator.setTranslationsForLanguage("de", { foo: "bar" }))
 
-    expect(target().text()).toBe("yolo")
+    expect(target).toHaveTextContent("yolo")
     expect(renders).toBe(4)
 
     act(() =>
@@ -84,7 +86,7 @@ describe("useTranslate", () => {
       })
     )
 
-    expect(target().text()).toBe("yolo")
+    expect(target).toHaveTextContent("yolo")
     expect(renders).toBe(4)
 
     act(() =>
@@ -93,7 +95,7 @@ describe("useTranslate", () => {
       })
     )
 
-    expect(target().text()).toBe("swag")
+    expect(target).toHaveTextContent("swag")
     expect(renders).toBe(5)
   })
 })

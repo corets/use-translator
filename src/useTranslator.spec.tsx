@@ -1,8 +1,7 @@
 import React from "react"
 import { createTranslator, ObservableTranslator } from "@corets/translator"
-import { mount } from "enzyme"
-import { act } from "react-dom/test-utils"
 import { TranslatorContext, useTranslator } from "./index"
+import { act, render, screen } from "@testing-library/react"
 
 describe("useTranslator", () => {
   it("uses translator", () => {
@@ -25,24 +24,25 @@ describe("useTranslator", () => {
       )
     }
 
-    const wrapper = mount(<Test />)
-    const target = () => wrapper.find("h1")
+    render(<Test />)
 
-    expect(target().text()).toBe("en bar")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("en bar")
     expect(translator.getLanguage()).toBe("en")
     expect(translator.get("foo")).toBe("bar")
     expect(renders).toBe(1)
 
     act(() => receivedTranslator.setLanguage("de"))
 
-    expect(target().text()).toBe("de yolo")
+    expect(target).toHaveTextContent("de yolo")
     expect(translator.getLanguage()).toBe("de")
     expect(translator.get("foo")).toBe("yolo")
     expect(renders).toBe(2)
 
     act(() => translator.setLanguage("en"))
 
-    expect(target().text()).toBe("en bar")
+    expect(target).toHaveTextContent("en bar")
     expect(renders).toBe(3)
 
     act(() => translator.setLanguage("en"))
@@ -76,15 +76,16 @@ describe("useTranslator", () => {
       )
     }
 
-    const wrapper = mount(<Root />)
-    const target = () => wrapper.find("h1")
+    render(<Root />)
 
-    expect(target().text()).toBe("en bar")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("en bar")
     expect(renders).toBe(1)
 
     act(() => translator.setLanguage("de"))
 
-    expect(target().text()).toBe("de yolo")
+    expect(target).toHaveTextContent("de yolo")
     expect(renders).toBe(2)
   })
 
@@ -98,7 +99,7 @@ describe("useTranslator", () => {
       return null
     }
 
-    expect(() => mount(<Test />)).toThrow()
+    expect(() => render(<Test />)).toThrow()
 
     console.error = errorLog
   })

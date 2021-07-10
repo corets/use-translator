@@ -18,10 +18,9 @@ export const useTranslator: UseTranslator = (translator) => {
   const [reference, setReference] = useState(0)
 
   useEffect(() => {
-    return translator!.listen(
-      () => setReference((previous) => previous + 1),
-      false
-    )
+    return translator!.listen(() => setReference((previous) => previous + 1), {
+      immediate: false,
+    })
   }, [])
 
   return translator
